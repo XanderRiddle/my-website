@@ -26,11 +26,23 @@
 </svg>
 
 <style>
+	/* The viewBox is 1440x900 (1.6). Under "slice" the scale is
+	   max(boxW/1440, boxH/900), so any box that isn't also 1.6 gets scaled by
+	   its height and then cropped horizontally — which slides cx="1008" off
+	   the portrait and x="576" off the 40vw boundary. Giving the box exactly
+	   the viewBox's aspect makes slice an exact fit, so viewBox x always maps
+	   to the same percentage of the viewport width at every window size.
+
+	   Anchored to the hero's bottom because that is where the portrait is
+	   anchored; --portrait-cx re-centres the field when the portrait moves
+	   (it sits at 50vw on the stacked mobile layout, 70vw on desktop). */
 	.loops {
 		position: absolute;
-		inset: 0;
+		bottom: 0;
+		left: 0;
 		width: 100%;
-		height: 100%;
+		height: calc(100vw / 1.6);
+		transform: translateX(calc(var(--portrait-cx, 70vw) - 70vw));
 		z-index: 0;
 		pointer-events: none;
 	}

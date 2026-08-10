@@ -23,6 +23,9 @@ import Portrait from "../components/Portrait.astro";
 	.hero {
 		position: relative;
 		min-height: 100svh;
+		/* Where the portrait's centre line falls. LoopField re-centres its
+		   rings on this, and it changes with the stacked layout below. */
+		--portrait-cx: 70vw;
 		/* Scoped to the hero so the portrait's bottom crop never introduces a
 		   page-level scrollbar (PLAN.md §3). */
 		overflow: hidden;
@@ -51,6 +54,9 @@ import Portrait from "../components/Portrait.astro";
 		right: 0;
 		bottom: 0;
 		height: 90svh;
+		/* Portrait sizes its own height so the derived width stays inside
+		   this zone; it needs to know how wide the zone is. */
+		--zone-w: 60vw;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
@@ -63,6 +69,9 @@ import Portrait from "../components/Portrait.astro";
 			   below the copy and the portrait's height derive from the same
 			   value, so they can't drift apart and collide. */
 			--stage-h: 50svh;
+			/* Stacked: the portrait spans the full width, so its centre line
+			   moves to the middle and the loop field follows it. */
+			--portrait-cx: 50vw;
 			display: flex;
 			flex-direction: column;
 			padding-top: calc(var(--nav-height) + 4.5rem);
@@ -86,6 +95,7 @@ import Portrait from "../components/Portrait.astro";
 		   bottom edge without eating into the copy. */
 		.zone-portrait {
 			left: 0;
+			--zone-w: 100vw;
 			height: calc(var(--stage-h) - 4svh);
 		}
 	}
