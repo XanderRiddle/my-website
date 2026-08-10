@@ -1,0 +1,106 @@
+/* Design tokens — see PLAN.md §2 */
+:root {
+	--bg: #0b0e14;
+	--bg-panel: #11151d;
+	--blue: #4da8ff;
+	--blue-dim: #2c4870;
+	--text: #f2f5f9;
+	--text-muted: #8a94a6;
+
+	--font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+	--font-body: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+	--nav-height: 4.5rem;
+	--page-gutter: clamp(1.25rem, 4vw, 3.5rem);
+
+	/* Load choreography — PLAN.md §6 */
+	--delay-portrait: 0s;
+	--delay-intro: 0.15s;
+	--delay-cutout: 0.3s;
+	--delay-loops: 0.4s;
+	--entrance-duration: 0.8s;
+	--float-distance: 40px;
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	min-height: 100svh;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-body);
+	font-size: 1rem;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-display);
+	line-height: 1.1;
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+:focus-visible {
+	outline: 2px solid var(--blue);
+	outline-offset: 4px;
+	border-radius: 2px;
+}
+
+/* Shared entrance animation. Elements opt in with .float-up and set
+   --delay; see PLAN.md §6. */
+@keyframes float-up {
+	from {
+		opacity: 0;
+		transform: translateY(var(--float-distance));
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.float-up {
+	opacity: 0;
+	animation: float-up var(--entrance-duration) cubic-bezier(0.22, 1, 0.36, 1)
+		var(--delay, 0s) both;
+}
+
+/* PLAN.md §6/§10: keep the fade, drop the travel and any idle loop.
+   Zeroing the distance rather than redefining the keyframes — @keyframes
+   inside @media has patchy legacy support, a custom property doesn't. */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--entrance-duration: 0.4s;
+		--float-distance: 0px;
+	}
+}

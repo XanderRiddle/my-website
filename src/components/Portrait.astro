@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../photos/professional-self-portrait-nobg.png";
+
+// Xander — largest element, bottom-anchored, stationary once landed
+// (PLAN.md §1/§5/§6). The source already ends at a mid-thigh crop flush with
+// the bottom of its canvas, so anchoring at bottom: 0 gives the intended
+// "standing in the frame" effect without any negative offset.
+//
+// Same content-box compensation as FloatingCutout: the opaque subject sits
+// inset within the canvas, so the frame is sized to the subject and the
+// image is scaled and nudged inside it.
+const content = { x: 0.057, y: 0.046, w: 0.84, h: 0.954 };
+const aspect = (portrait.width * content.w) / (portrait.height * content.h);
+
+const vars = [
+	`--content-x:${content.x}`,
+	`--content-y:${content.y}`,
+	`--content-w:${content.w}`,
+	`--content-h:${content.h}`,
+	`--aspect:${aspect}`,
+	`--delay:var(--delay-portrait)`,
+].join(";");
+---
+
+<a class="portrait float-up" href="/about" style={vars}>
+	<span class="lift">
+		<span class="frame">
+			<Image
+				src={portrait}
+				alt="Xander Riddle in a black suit, hands in pockets, smiling"
+				widths={[500, 750, 1024]}
+				sizes="(max-width: 767px) 62vw, 32vw"
+				format="webp"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</span>
+	</span>
+</a>
+
+<style>
+	/* Height-driven: the parent zone sets the height, the frame's
+	   aspect-ratio derives the width. */
+	.portrait {
+		display: block;
+		height: 100%;
+		cursor: pointer;
+	}
+
+	.lift,
+	.frame {
+		display: block;
+	}
+
+	.lift {
+		height: 100%;
+		transition: transform 200ms ease-out;
+	}
+
+	.portrait:hover .lift,
+	.portrait:focus-visible .lift {
+		transform: translateY(-10px);
+	}
+
+	.frame {
+		position: relative;
+		height: 100%;
+		aspect-ratio: var(--aspect);
+	}
+
+	.frame::before {
+		content: "";
+		position: absolute;
+		inset: -8%;
+		z-index: -1;
+		background: radial-gradient(
+			circle at 50% 45%,
+			var(--blue) 0%,
+			transparent 65%
+		);
+		filter: blur(24px);
+		opacity: 0;
+		transition: opacity 240ms ease-out;
+	}
+
+	.portrait:hover .frame::before,
+	.portrait:focus-visible .frame::before {
+		opacity: 0.6;
+	}
+
+	.frame :global(img) {
+		position: absolute;
+		height: calc(100% / var(--content-h));
+		width: auto;
+		left: calc(-100% * var(--content-x) / var(--content-w));
+		top: calc(-100% * var(--content-y) / var(--content-h));
+		max-width: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.lift {
+			transition: none;
+		}
+
+		.portrait:hover .lift,
+		.portrait:focus-visible .lift {
+			transform: none;
+		}
+	}
+</style>

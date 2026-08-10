@@ -1,0 +1,105 @@
+---
+// Copy is the PLAN.md §8 placeholder, used verbatim pending final wording.
+---
+
+<div class="intro float-up" style="--delay: var(--delay-intro)">
+	<p class="eyebrow">Engineer &amp; Project Manager</p>
+	<h1>Hello, I'm <span>Xander</span>.</h1>
+	<p class="lede">
+		I'm an engineer and project manager who likes turning ideas into working
+		machines. I build and compete with combat robots like Ferrarii, splitting my
+		time between hands-on fabrication and the planning it takes to get a
+		team-built robot to the competition floor on time. Outside of that I'm
+		usually digging into code or whatever new problem has caught my attention.
+	</p>
+	<a class="cta" href="/projects">
+		View my work
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M5 12h14" />
+			<path d="m13 6 6 6-6 6" />
+		</svg>
+	</a>
+</div>
+
+<style>
+	.intro {
+		max-width: 34ch;
+	}
+
+	.eyebrow {
+		font-family: var(--font-display);
+		font-size: 0.8125rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--blue);
+		margin-bottom: 1rem;
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		margin-bottom: 1.25rem;
+	}
+
+	h1 span {
+		color: var(--blue);
+	}
+
+	.lede {
+		color: var(--text-muted);
+		font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+		margin-bottom: 2rem;
+	}
+
+	.cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.75rem 1.5rem;
+		border: 1px solid var(--blue-dim);
+		border-radius: 999px;
+		font-family: var(--font-display);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		color: var(--text);
+		transition:
+			border-color 200ms ease-out,
+			background-color 200ms ease-out,
+			transform 200ms ease-out;
+	}
+
+	.cta svg {
+		width: 1.125rem;
+		height: 1.125rem;
+		transition: transform 200ms ease-out;
+	}
+
+	.cta:hover {
+		border-color: var(--blue);
+		background: color-mix(in srgb, var(--blue) 12%, transparent);
+	}
+
+	.cta:hover svg {
+		transform: translateX(3px);
+	}
+
+	@media (max-width: 767px) {
+		.intro {
+			max-width: 46ch;
+			margin-inline: auto;
+			text-align: center;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cta,
+		.cta svg {
+			transition: none;
+		}
+
+		.cta:hover svg {
+			transform: none;
+		}
+	}
+</style>

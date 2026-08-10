@@ -1,0 +1,168 @@
+---
+import { Image } from "astro:assets";
+
+// Reusable floating cutout (Ferrarii today, other homepage elements later).
+//
+// Two things this component exists to solve:
+//
+// 1. Content-box compensation. The source PNGs carry wide transparent
+//    margins, so sizing the <img> directly renders the subject smaller and
+//    off-centre. `content` describes where the opaque pixels actually sit as
+//    fractions of the canvas; the frame is sized to the *subject* and the
+//    image is scaled and offset inside it. See PLAN.md "Measured asset geometry".
+//
+// 2. Composing the idle bob with the hover lift. They live on separate
+//    nested elements so each owns its own transform and neither clobbers
+//    the other (PLAN.md §6).
+
+interface Props {
+	src: ImageMetadata;
+	alt: string;
+	href: string;
+	/** Opaque-content box as fractions of the canvas: offset x/y, width/height. */
+	content?: { x: number; y: number; w: number; h: number };
+	widths?: number[];
+	sizes?: string;
+	delay?: string;
+	class?: string;
+}
+
+const {
+	src,
+	alt,
+	href,
+	content = { x: 0, y: 0, w: 1, h: 1 },
+	widths = [500, 800, 1100],
+	sizes = "40vw",
+	delay = "var(--delay-cutout)",
+	class: className,
+} = Astro.props;
+
+// The visible subject's aspect ratio, not the canvas's.
+const aspect = (src.width * content.w) / (src.height * content.h);
+
+// Without an explicit width Astro emits the full-size original as the <img
+// src> fallback — for the 4000px Ferrarii source that's a 468kB file that no
+// srcset-capable browser ever requests. Cap it at the largest declared width.
+const fallbackWidth = Math.min(Math.max(...widths), src.width);
+
+const vars = [
+	`--content-x:${content.x}`,
+	`--content-y:${content.y}`,
+	`--content-w:${content.w}`,
+	`--content-h:${content.h}`,
+	`--aspect:${aspect}`,
+	`--delay:${delay}`,
+].join(";");
+---
+
+<a class:list={["cutout", "float-up", className]} href={href} style={vars}>
+	<span class="bob">
+		<span class="lift">
+			<span class="frame">
+				<Image
+					src={src}
+					alt={alt}
+					width={fallbackWidth}
+					widths={widths}
+					sizes={sizes}
+					format="webp"
+					loading="eager"
+					fetchpriority="high"
+				/>
+			</span>
+		</span>
+	</span>
+</a>
+
+<style>
+	.cutout {
+		display: block;
+		cursor: pointer;
+	}
+
+	.bob,
+	.lift,
+	.frame {
+		display: block;
+	}
+
+	/* Idle float — PLAN.md §6. Lives alone on this element so the hover
+	   lift below can't overwrite it. */
+	@keyframes bob {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-12px);
+		}
+	}
+
+	.bob {
+		animation: bob 4s ease-in-out infinite;
+		/* Start bobbing only once the entrance has landed. */
+		animation-delay: calc(var(--delay) + var(--entrance-duration));
+	}
+
+	.lift {
+		transition: transform 200ms ease-out;
+	}
+
+	.cutout:hover .lift,
+	.cutout:focus-visible .lift {
+		transform: translateY(-10px);
+	}
+
+	.frame {
+		position: relative;
+		width: 100%;
+		aspect-ratio: var(--aspect);
+	}
+
+	/* Hover glow, behind the artwork. */
+	.frame::before {
+		content: "";
+		position: absolute;
+		inset: -12%;
+		z-index: -1;
+		background: radial-gradient(
+			circle at 50% 55%,
+			var(--blue) 0%,
+			transparent 68%
+		);
+		filter: blur(24px);
+		opacity: 0;
+		transition: opacity 240ms ease-out;
+	}
+
+	.cutout:hover .frame::before,
+	.cutout:focus-visible .frame::before {
+		opacity: 0.6;
+	}
+
+	/* Scale and offset so the opaque subject fills the frame exactly. */
+	.frame :global(img) {
+		position: absolute;
+		width: calc(100% / var(--content-w));
+		height: auto;
+		left: calc(-100% * var(--content-x) / var(--content-w));
+		top: calc(-100% * var(--content-y) / var(--content-h));
+		max-width: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.bob {
+			animation: none;
+		}
+
+		.lift {
+			transition: none;
+		}
+
+		.cutout:hover .lift,
+		.cutout:focus-visible .lift {
+			transform: none;
+		}
+	}
+</style>

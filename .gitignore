@@ -1,0 +1,50 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# full-resolution masters of the cutouts in src/photos/. The committed copies
+# are downscaled to the largest width the pages request, because Vite emits
+# every ESM-imported original into dist/_astro/ even though nothing links to it.
+src/photos/_originals/
+
+# Photos not yet referenced by any page. Vite emits every ESM-imported image
+# into dist/, so these stay out of the repo until a page actually imports one —
+# delete the matching line here when that happens.
+# Currently used (and tracked): ferrarii-side-nobg.png,
+# professional-self-portrait-nobg.png
+src/photos/casual-self-portrait-nobg.png
+src/photos/competition-photo-1-robobuzz.png
+src/photos/competition-photo-2-AJRST.png
+src/photos/competition-photo-3-RSM.png
+src/photos/competitions-icon-reference.png
+src/photos/experience-icon-1-GT.png
+src/photos/experience-icon-1-UPS.png
+src/photos/experience-icon-3-Kovari.png
+src/photos/projects-icons-reference.png
+src/photos/spii-front-nobg.png
+src/photos/spii-side-nobg.png
+
+# design references for the homepage build, not shipped
+src/photos/home-page-layout-reference.png
+src/photos/style-reference.png

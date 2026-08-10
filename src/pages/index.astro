@@ -1,0 +1,124 @@
+---
+import Layout from "../layouts/Layout.astro";
+import LoopField from "../components/LoopField.astro";
+import IntroText from "../components/IntroText.astro";
+import Portrait from "../components/Portrait.astro";
+import FloatingCutout from "../components/FloatingCutout.astro";
+import ferrarii from "../photos/ferrarii-side-nobg.png";
+
+// Measured opaque-content box for the Ferrarii cutout — see PLAN.md
+// "Measured asset geometry". Without this the robot renders ~30% small and
+// visibly off-centre inside its own transparent margins.
+const ferrariiContent = { x: 0.177, y: 0.116, w: 0.699, h: 0.834 };
+---
+
+<Layout title="Xander Riddle — Engineer & Project Manager">
+	<section class="hero">
+		<LoopField />
+
+		<div class="zone zone-text">
+			<IntroText />
+		</div>
+
+		<div class="zone zone-robot">
+			<FloatingCutout
+				src={ferrarii}
+				alt="Ferrarii, a green and black combat robot with an angled steel wedge"
+				href="/projects/ferrarii"
+				content={ferrariiContent}
+				widths={[600, 900, 1300]}
+				sizes="(max-width: 767px) 64vw, 43vw"
+			/>
+		</div>
+
+		<div class="zone zone-portrait">
+			<Portrait />
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		position: relative;
+		min-height: 100svh;
+		/* Scoped to the hero so the portrait's bottom crop never introduces a
+		   page-level scrollbar (PLAN.md §3). */
+		overflow: hidden;
+	}
+
+	.zone {
+		position: absolute;
+		z-index: 10;
+	}
+
+	/* Desktop three-zone layout — PLAN.md §5 */
+	.zone-text {
+		left: var(--page-gutter);
+		top: 50%;
+		transform: translateY(-50%);
+		/* Kept just clear of .zone-robot's left edge so the lede never
+		   collides with the wedge. */
+		width: min(29vw, 27rem);
+	}
+
+	/* Right edge runs just past the portrait's left edge so Xander's shoulder
+	   overlaps Ferrarii's front, per PLAN.md §5. */
+	.zone-robot {
+		left: 36vw;
+		bottom: 12svh;
+		width: 31vw;
+	}
+
+	/* Xander sits above Ferrarii so his shoulder overlaps the robot's front
+	   edge, matching the reference composite. */
+	.zone-portrait {
+		right: 2vw;
+		bottom: 0;
+		height: 90svh;
+		z-index: 20;
+	}
+
+	/* Stacked layout — PLAN.md §5. Text on top, then both cutouts sharing a
+	   stage below, Xander still the larger of the two. */
+	@media (max-width: 767px) {
+		.hero {
+			/* Single source of truth for the stacked layout: the reserved
+			   band below the copy and the portrait's height derive from the
+			   same value, so they can't drift apart and collide. */
+			--stage-h: 50svh;
+			display: flex;
+			flex-direction: column;
+			padding-top: calc(var(--nav-height) + 4.5rem);
+		}
+
+		.zone-text {
+			position: static;
+			width: 100%;
+			transform: none;
+			padding-inline: var(--page-gutter);
+		}
+
+		/* Reserve the band the cutouts occupy so they never overlap the copy. */
+		.hero::after {
+			content: "";
+			display: block;
+			flex: 1 0 var(--stage-h);
+		}
+
+		.zone-robot {
+			left: -4vw;
+			bottom: 3svh;
+			width: 52vw;
+			z-index: 10;
+		}
+
+		/* Kept shorter than the reserved band, and still the larger of the
+		   two cutouts (PLAN.md §5). */
+		.zone-portrait {
+			right: -6vw;
+			bottom: 0;
+			height: calc(var(--stage-h) - 4svh);
+			z-index: 20;
+		}
+	}
+</style>

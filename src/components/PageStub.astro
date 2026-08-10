@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Placeholder shell for routes that exist so nav and cutout links resolve,
+// but whose content hasn't been written yet.
+interface Props {
+	title: string;
+	heading?: string;
+}
+
+const { title, heading } = Astro.props;
+---
+
+<Layout title={`${title} — Xander Riddle`}>
+	<section class="stub">
+		<p class="eyebrow">Coming soon</p>
+		<h1>{heading ?? title}</h1>
+		<p class="note">
+			This page hasn't been built yet. <a href="/">Back to the homepage</a>.
+		</p>
+		<slot />
+	</section>
+</Layout>
+
+<style>
+	.stub {
+		min-height: 100svh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 1rem;
+		padding: calc(var(--nav-height) + 3rem) var(--page-gutter) 4rem;
+		max-width: 46rem;
+	}
+
+	.eyebrow {
+		font-family: var(--font-display);
+		font-size: 0.8125rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--blue);
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 5vw, 3.5rem);
+		letter-spacing: -0.02em;
+	}
+
+	.note {
+		color: var(--text-muted);
+	}
+
+	.note a {
+		color: var(--blue);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+</style>

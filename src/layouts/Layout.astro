@@ -1,0 +1,53 @@
+---
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const {
+	title,
+	description = "Xander Riddle — engineer and project manager building combat robots and software.",
+} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#0B0E14" />
+		<title>{title}</title>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<Nav />
+		<main id="main">
+			<slot />
+		</main>
+		<style>
+			.skip-link {
+				position: absolute;
+				left: -9999px;
+				top: 0;
+				z-index: 100;
+				padding: 0.75rem 1.25rem;
+				background: var(--bg-panel);
+				color: var(--text);
+				border: 1px solid var(--blue-dim);
+			}
+
+			.skip-link:focus {
+				left: var(--page-gutter);
+				top: 0.75rem;
+			}
+		</style>
+	</body>
+</html>
