@@ -15,8 +15,7 @@
 
 	/* Load choreography — PLAN.md §6 */
 	--delay-portrait: 0s;
-	--delay-intro: 0.15s;
-	--delay-cutout: 0.3s;
+	--delay-intro: 0.2s;
 	--delay-loops: 0.4s;
 	--entrance-duration: 0.8s;
 	--float-distance: 40px;

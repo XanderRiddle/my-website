@@ -1,5 +1,7 @@
 ---
-// PLAN.md §1/§6: thin blue loop lines that draw in behind the cutouts.
+// PLAN.md §1/§6: thin blue loop lines that draw in behind the portrait.
+// The rings are centred on the portrait so they read on both sides of it, and
+// the vertical rule sits on the 40vw text/portrait boundary (PLAN.md §5).
 // Purely decorative — hidden from assistive tech.
 // Every shape carries pathLength="1" so one dash rule drives circles and
 // lines alike regardless of their real geometry.
@@ -13,12 +15,12 @@
 	focusable="false"
 >
 	<g class="draw" fill="none" stroke-linecap="round">
-		<circle class="s1" pathLength="1" cx="742" cy="606" r="252" stroke="var(--blue)" stroke-width="1.25" opacity="0.5" />
-		<circle class="s2" pathLength="1" cx="1064" cy="430" r="386" stroke="var(--blue-dim)" stroke-width="1.5" />
+		<circle class="s1" pathLength="1" cx="1000" cy="636" r="300" stroke="var(--blue)" stroke-width="1.25" opacity="0.5" />
+		<circle class="s2" pathLength="1" cx="1008" cy="440" r="430" stroke="var(--blue-dim)" stroke-width="1.5" />
 		<circle class="s3" pathLength="1" cx="286" cy="238" r="126" stroke="var(--blue-dim)" stroke-width="1.25" />
 		<line class="s4" pathLength="1" x1="0" y1="792" x2="1440" y2="792" stroke="var(--blue-dim)" stroke-width="1" />
-		<line class="s5" pathLength="1" x1="418" y1="0" x2="418" y2="900" stroke="var(--blue-dim)" stroke-width="1" />
-		<circle class="s6" pathLength="1" cx="418" cy="792" r="9" stroke="var(--blue)" stroke-width="1.5" />
+		<line class="s5" pathLength="1" x1="576" y1="0" x2="576" y2="900" stroke="var(--blue-dim)" stroke-width="1" />
+		<circle class="s6" pathLength="1" cx="576" cy="792" r="9" stroke="var(--blue)" stroke-width="1.5" />
 		<circle class="s7" pathLength="1" cx="286" cy="112" r="6" stroke="var(--blue)" stroke-width="1.5" />
 	</g>
 </svg>
