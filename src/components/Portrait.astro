@@ -41,10 +41,17 @@ const vars = [
 
 <style>
 	/* Height-driven: the parent zone sets the height, the frame's
-	   aspect-ratio derives the width. */
+	   aspect-ratio derives the width. Because the width is derived, height
+	   alone is not a safe constraint — on a tall, narrow window 90svh makes
+	   him wider than his zone, so he spills over the text column and gets
+	   clipped by the viewport edge. Cap the height at whatever keeps the
+	   derived width inside the zone, leaving a gutter on each side. */
 	.portrait {
 		display: block;
-		height: 100%;
+		height: min(
+			100%,
+			calc((var(--zone-w, 100vw) - 2 * var(--page-gutter)) / var(--aspect))
+		);
 		cursor: pointer;
 	}
 
