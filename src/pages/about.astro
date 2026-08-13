@@ -1,5 +1,43 @@
 ---
-import PageStub from "../components/PageStub.astro";
+import Layout from "../layouts/Layout.astro";
+import BioText from "../components/about/BioText.astro";
+import PhotoCarousel from "../components/about/PhotoCarousel.astro";
 ---
 
-<PageStub title="About" />
+<Layout
+	title="About — Xander Riddle"
+	description="Xander Riddle — 5th year computer science student at Georgia Tech and full-stack robotics engineer."
+>
+	<section class="about">
+		<div class="col col-text">
+			<BioText />
+		</div>
+
+		<div class="col col-photo">
+			<PhotoCarousel />
+		</div>
+	</section>
+</Layout>
+
+<style>
+	/* Two top-aligned columns centred as a block — PLAN-about.md §1. Unlike the
+	   hero this page scrolls normally, so no min-height/overflow clamp. */
+	.about {
+		display: grid;
+		grid-template-columns: minmax(0, 57fr) minmax(0, 43fr);
+		align-items: start;
+		gap: clamp(2rem, 5vw, 4.5rem);
+		max-width: 78rem;
+		margin-inline: auto;
+		padding: calc(var(--nav-height) + 3.5rem) var(--page-gutter) 5rem;
+	}
+
+	/* Stacked: bio first, since it's the primary content — PLAN-about.md §1. */
+	@media (max-width: 767px) {
+		.about {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 3rem;
+			padding-top: calc(var(--nav-height) + 5rem);
+		}
+	}
+</style>

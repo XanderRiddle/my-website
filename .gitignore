@@ -32,7 +32,8 @@ src/photos/_originals/
 # into dist/, so these stay out of the repo until a page actually imports one —
 # delete the matching line here when that happens.
 # Currently used (and tracked): ferrarii-side-nobg.png,
-# professional-self-portrait-nobg.png
+# professional-self-portrait-nobg.png, and all of about-me-photos/ (the
+# /about carousel — sources downscaled to 840, their max requested width).
 src/photos/casual-self-portrait-nobg.png
 src/photos/competition-photo-1-robobuzz.png
 src/photos/competition-photo-2-AJRST.png
