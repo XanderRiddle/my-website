@@ -1,0 +1,159 @@
+---
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import TagBubble from "../../components/projects/TagBubble.astro";
+
+// PLAN-projects.md §7 step 7 — starts as title + description + tags + hero
+// shot; the markdown body of each entry is rendered below once written, and a
+// photo gallery slots in after that.
+export const getStaticPaths: GetStaticPaths = async () => {
+	const projects = await getCollection("projects");
+	return projects.map((project) => ({
+		params: { slug: project.id },
+		props: { project },
+	}));
+};
+
+interface Props {
+	project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, thumbnail, description, tags } = project.data;
+const { Content } = await render(project);
+// Every entry currently ships with only an HTML-comment placeholder in its
+// body (see e.g. content/projects/ferrarii.md) — strip comments before
+// checking, or that placeholder itself counts as "content" and the pending
+// message below never shows.
+const hasBody = Boolean(project.body?.replace(/<!--[\s\S]*?-->/g, "").trim());
+---
+
+<Layout title={`${title} — Xander Riddle`} description={description}>
+	<article class="project">
+		<a class="back" href="/projects">← All projects</a>
+
+		<header class="head float-up">
+			<h1>{title}</h1>
+			<p class="description">{description}</p>
+			<ul class="tags">
+				{
+					tags.map((tag) => (
+						<li>
+							<TagBubble tag={tag} />
+						</li>
+					))
+				}
+			</ul>
+		</header>
+
+		<div class="shot float-up" style="--delay:0.15s">
+			<Image
+				src={thumbnail}
+				alt={`${title} project thumbnail`}
+				widths={[...new Set([720, Math.min(1120, thumbnail.width)])]}
+				sizes="(max-width: 767px) 92vw, 60rem"
+				format="webp"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</div>
+
+		{
+			hasBody ? (
+				<div class="body">
+					<Content />
+				</div>
+			) : (
+				<p class="pending">
+					A full write-up and photo gallery for this project are on the way.
+				</p>
+			)
+		}
+	</article>
+</Layout>
+
+<style>
+	.project {
+		max-width: 60rem;
+		margin-inline: auto;
+		padding: calc(var(--nav-height) + 3rem) var(--page-gutter) 5rem;
+	}
+
+	.back {
+		display: inline-block;
+		margin-bottom: 1.75rem;
+		color: var(--text-muted);
+		font-size: 0.9375rem;
+		transition: color 180ms ease-out;
+	}
+
+	.back:hover {
+		color: var(--blue);
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 5vw, 3.5rem);
+		letter-spacing: -0.02em;
+	}
+
+	.description {
+		margin-top: 0.75rem;
+		max-width: 42rem;
+		color: var(--text-muted);
+		font-size: 1.0625rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4375rem;
+		margin-top: 1.25rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.shot {
+		margin-top: 2.5rem;
+		border-radius: 16px;
+		overflow: hidden;
+		border: 1px solid var(--blue-dim);
+		background: var(--bg-panel);
+	}
+
+	.shot :global(img) {
+		width: 100%;
+		height: auto;
+	}
+
+	.body,
+	.pending {
+		margin-top: 2.5rem;
+		max-width: 44rem;
+		color: var(--text-muted);
+	}
+
+	.body :global(h2) {
+		margin-top: 2rem;
+		color: var(--text);
+		font-size: 1.5rem;
+	}
+
+	.body :global(p + p) {
+		margin-top: 1rem;
+	}
+
+	.body :global(a) {
+		color: var(--blue);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	@media (max-width: 767px) {
+		.project {
+			padding-top: calc(var(--nav-height) + 4.5rem);
+		}
+	}
+</style>

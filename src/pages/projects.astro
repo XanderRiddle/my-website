@@ -1,5 +1,65 @@
 ---
-import PageStub from "../components/PageStub.astro";
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/projects/ProjectCard.astro";
+
+// PLAN-projects.md §1/§5. Ordering is explicit frontmatter, not filename.
+const projects = (await getCollection("projects")).sort(
+	(a, b) => a.data.order - b.data.order,
+);
 ---
 
-<PageStub title="Projects" />
+<Layout
+	title="Projects — Xander Riddle"
+	description="Combat robots, embedded systems and software projects built by Xander Riddle."
+>
+	<section class="projects">
+		<header class="intro float-up">
+			<h1>Projects</h1>
+		</header>
+
+		{/* CSS multi-column, no JS masonry — PLAN-projects.md §1. Fills
+		    column-first rather than row-first; with two columns and five cards
+		    that reads fine. */}
+		<div class="grid">
+			{
+				projects.map((project, i) => (
+					<ProjectCard project={project} index={i} />
+				))
+			}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.projects {
+		max-width: 72rem;
+		margin-inline: auto;
+		padding: calc(var(--nav-height) + 3.5rem) var(--page-gutter) 5rem;
+	}
+
+	.intro {
+		max-width: 42rem;
+		margin-bottom: clamp(2rem, 4vw, 3rem);
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 5vw, 3.5rem);
+		letter-spacing: -0.02em;
+	}
+
+	.grid {
+		columns: 2;
+		column-gap: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	@media (max-width: 767px) {
+		.grid {
+			columns: 1;
+		}
+
+		.projects {
+			padding-top: calc(var(--nav-height) + 5rem);
+		}
+	}
+</style>
