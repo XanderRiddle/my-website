@@ -17,26 +17,11 @@ Mobile (< 768px): stack — carousel first (or text first, your call, defaulting
 
 ## 2. Bio text
 
-Using your draft with light copyedits only — typos and a couple of grammar snags (comma splice, hyphenation, article agreement). No content, facts, or tone changes. Flagging each fix below so you can sanity-check before I lock it in:
+Condensed to fit ~16 lines at 90 characters/line (your monitor's line length) — checked with `textwrap` at width 90, comes out to 15 lines across 3 paragraphs. Greeting is folded into the opening sentence instead of sitting on its own line to save space. Cut for length: the "if I were to describe myself..." framing, the "music has been a big part of my life" line (redundant with the marching band detail), the ensembles/ "not exclusively" asides, the Silk Song mention, and the CAD/Onshape sentence. Flag anything you want restored — happy to trade something else out to make room.
 
-- "self proclaimed full stack" → "self-proclaimed full-stack" (hyphenate compound adjectives)
-- "by my interests 3 come to mind" → "by my interests, 3 come to mind" (missing comma)
-- "UGA and Georgia Tech marching band" → "marching bands" (plural, since it's two bands)
-- "just like to Jam" → "just like to jam" (stray capital)
-- "This past year for me was very interesting, I started it off strong" → "...interesting — I started it off strong" (comma splice fixed with an em dash)
-- "2 teaching assistent jobs" → "2 teaching assistant jobs" (typo)
-- "Speaking of hardware over the past year" → "Speaking of hardware, over the past year" (missing comma)
-- "Finally this Summer I worked" → "Finally, this summer I worked" (missing comma, lowercase season)
-- "fast paced and individual development environment" → "fast-paced and individual development environment" (hyphenate)
-- "that startup might be more achiveable than what I previously thought" → "that a startup might be more achievable than I previously thought" (typo + article + wording)
-
-Final text:
-
-> **Hello, my name is Xander Riddle.**
+> Hello, my name is Xander Riddle — a 5th year computer science student at Georgia Tech and a self-proclaimed full-stack robotics engineer. My biggest interests are robotics, music, and video games. I spend most of my free time building robots and leading the RoboWrestling team at Georgia Tech. I've also marched in both the UGA and Georgia Tech bands, and these days I like to jam with friends back home.
 >
-> I'm a 5th year computer science student at Georgia Tech, and a self-proclaimed full-stack robotics engineer. If I were to describe myself by my interests, 3 come to mind: robotics, music and video games. I spend most of my free time building robots, usually for competition, but not exclusively. I also really enjoy leading the RoboWrestling team at Georgia Tech; leadership is very fulfilling. Music has also been a very big part of my life for a long time. I have marched across the country in both the UGA and Georgia Tech marching bands, and have participated in a number of ensembles, but these days I just like to jam with my friends back home. And a good game that I played recently was Silk Song.
->
-> This past year for me was very interesting. I started it off strong with getting promoted to Project Manager of the RoboWrestling team, where I was able to accomplish my primary goals of increasing the quality of bots and the number of competitions we competed at by taking my team to both Japan and Brazil, and winning 4th place in 2 categories in Brazil. I also completed a lot of my intelligence course work, finally filling in a lot of the knowledge gaps when it comes to artificial intelligence development, and I picked up 2 teaching assistant jobs, both for hardware. Speaking of hardware, over the past year I have really honed my CAD skills, adding Onshape to my repertoire of maker skills. Finally, this summer I worked at a startup called Kovari, where I really got acclimated to the fast-paced and individual development environment, and it showed me that a startup might be more achievable than I previously thought.
+> This past year I was promoted to Project Manager of the RoboWrestling team, where I improved bot quality and competition count, taking the team to Japan and Brazil and placing 4th in 2 categories in Brazil. I also filled key gaps in my AI coursework and picked up 2 hardware TA positions. Most recently, I worked at the startup Kovari, which showed me a fast-paced, independent dev environment, and that a startup might be more achievable than I'd thought.
 >
 > I'm really looking forward to my 5th year of school, and excited for what the future has in store for me.
 

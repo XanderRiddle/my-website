@@ -1,0 +1,270 @@
+---
+import { Image } from "astro:assets";
+import casual from "../../photos/about-me-photos/Casual-self-portrait.jpg";
+import robot from "../../photos/about-me-photos/Photo-posing-with-robot.jpg";
+import sax from "../../photos/about-me-photos/photo-with-sax.jpg";
+
+// PLAN-about.md §3. All three sources are already ~2:3, so the frame crops
+// almost nothing.
+const slides = [
+	{
+		src: casual,
+		alt: "Xander throwing a peace sign in front of the Golden Gate Bridge, headphones around his neck",
+	},
+	{
+		src: robot,
+		alt: "Xander in a RoboJackets polo at a workbench beside a flame-painted combat robot",
+	},
+	{
+		src: sax,
+		alt: "Xander in his Georgia Tech marching band uniform holding a saxophone in the stands",
+	},
+];
+
+// The frame renders at ~26rem, so 840 is the 2x breakpoint — but the sources
+// are stored at exactly their largest requested width (see the note in
+// .gitignore), and the robot photo's master is only 660 wide. Asking past a
+// source's own width just gets the source back, so cap each one.
+const widths = (img: { width: number }) => [
+	...new Set([420, Math.min(840, img.width)]),
+];
+---
+
+<div
+	class="carousel float-up"
+	role="group"
+	aria-roledescription="carousel"
+	aria-label="Photos of Xander"
+	tabindex="0"
+>
+	{/* All three load eagerly: lazy slides never fetch (they're opacity 0, so
+	    Chrome doesn't count them as needed) and the first autoplay advance at 5s
+	    would cross-fade to an empty frame. They're ~30 KB each as WebP. */}
+	<div class="frame">
+		{
+			slides.map(({ src, alt }, i) => (
+				<div
+					class:list={["slide", i === 0 && "is-active"]}
+					aria-hidden={i === 0 ? undefined : "true"}
+				>
+					<Image
+						src={src}
+						alt={alt}
+						widths={widths(src)}
+						sizes="(max-width: 767px) 82vw, 26rem"
+						format="webp"
+						loading="eager"
+						fetchpriority={i === 0 ? "high" : "low"}
+					/>
+				</div>
+			))
+		}
+	</div>
+
+	<button class="arrow prev" type="button" aria-label="Previous photo">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m14.5 5-7 7 7 7" />
+		</svg>
+	</button>
+
+	<button class="arrow next" type="button" aria-label="Next photo">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m9.5 5 7 7-7 7" />
+		</svg>
+	</button>
+</div>
+
+<style>
+	.carousel {
+		--slide-shift: 40px;
+		--slide-duration: 550ms;
+		position: relative;
+		width: min(100%, 26rem);
+		margin-inline: auto;
+	}
+
+	.frame {
+		position: relative;
+		aspect-ratio: 2 / 3;
+		overflow: hidden;
+		border: 3px solid var(--blue);
+		border-radius: 18px;
+		background: var(--bg-panel);
+		box-shadow: 0 18px 60px -18px color-mix(in srgb, var(--blue) 65%, transparent);
+	}
+
+	/* Idle slides park off to the left with no transition, so resetting a
+	   just-left slide snaps instead of animating backwards behind the new one. */
+	.slide {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: translateX(calc(-1 * var(--slide-shift)));
+	}
+
+	.slide.is-active,
+	.slide.is-leaving {
+		transition:
+			opacity var(--slide-duration) ease,
+			transform var(--slide-duration) ease;
+	}
+
+	.slide.is-active {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.slide.is-leaving {
+		opacity: 0;
+		transform: translateX(var(--slide-shift));
+	}
+
+	.slide :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		border: 1px solid var(--blue-dim);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--bg) 72%, transparent);
+		backdrop-filter: blur(6px);
+		color: var(--blue);
+		cursor: pointer;
+		transition:
+			background-color 200ms ease-out,
+			border-color 200ms ease-out;
+	}
+
+	.arrow:hover {
+		border-color: var(--blue);
+		background: color-mix(in srgb, var(--bg) 88%, transparent);
+	}
+
+	.arrow svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.prev {
+		left: 0.75rem;
+	}
+
+	.next {
+		right: 0.75rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		/* Plain opacity crossfade, autoplay unchanged — PLAN-about.md §3. */
+		.carousel {
+			--slide-shift: 0px;
+		}
+
+		.arrow {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	const INTERVAL = 5000;
+
+	for (const carousel of document.querySelectorAll<HTMLElement>(".carousel")) {
+		const slides = [...carousel.querySelectorAll<HTMLElement>(".slide")];
+		if (slides.length < 2) continue;
+
+		const prev = carousel.querySelector<HTMLButtonElement>(".prev");
+		const next = carousel.querySelector<HTMLButtonElement>(".next");
+		let current = slides.findIndex((s) => s.classList.contains("is-active"));
+		if (current < 0) current = 0;
+		let timer: number | undefined;
+		let hovered = false;
+		let focused = false;
+
+		function show(index: number) {
+			const target = (index + slides.length) % slides.length;
+			if (target === current) return;
+
+			const outgoing = slides[current];
+			outgoing.classList.remove("is-active");
+			outgoing.classList.add("is-leaving");
+			outgoing.setAttribute("aria-hidden", "true");
+			// Park it back on the left once it has finished leaving, so it's
+			// ready to enter from that side next time round.
+			outgoing.addEventListener(
+				"transitionend",
+				() => outgoing.classList.remove("is-leaving"),
+				{ once: true },
+			);
+
+			const incoming = slides[target];
+			incoming.classList.remove("is-leaving");
+			incoming.classList.add("is-active");
+			incoming.removeAttribute("aria-hidden");
+
+			current = target;
+		}
+
+		function stop() {
+			if (timer !== undefined) window.clearInterval(timer);
+			timer = undefined;
+		}
+
+		// Autoplay runs unless the carousel is hovered or holds focus; both have
+		// to clear before it picks back up — PLAN-about.md §3.
+		function start() {
+			stop();
+			if (hovered || focused) return;
+			timer = window.setInterval(() => show(current + 1), INTERVAL);
+		}
+
+		// A manual jump restarts the clock so autoplay doesn't advance again a
+		// moment later — PLAN-about.md §3.
+		function go(step: number) {
+			show(current + step);
+			start();
+		}
+
+		prev?.addEventListener("click", () => go(-1));
+		next?.addEventListener("click", () => go(1));
+
+		carousel.addEventListener("keydown", (event) => {
+			if (event.key === "ArrowLeft") {
+				event.preventDefault();
+				go(-1);
+			} else if (event.key === "ArrowRight") {
+				event.preventDefault();
+				go(1);
+			}
+		});
+
+		carousel.addEventListener("pointerenter", () => {
+			hovered = true;
+			stop();
+		});
+		carousel.addEventListener("pointerleave", () => {
+			hovered = false;
+			start();
+		});
+		carousel.addEventListener("focusin", () => {
+			focused = true;
+			stop();
+		});
+		carousel.addEventListener("focusout", (event) => {
+			if (carousel.contains(event.relatedTarget as Node | null)) return;
+			focused = false;
+			start();
+		});
+
+		start();
+	}
+</script>

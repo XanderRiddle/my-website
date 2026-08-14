@@ -1,0 +1,144 @@
+---
+// PLAN-about.md §2: the bio copy verbatim from the plan (copyedits already
+// applied there), the résumé download, and the date line.
+const written = "August 11, 2026";
+---
+
+<div class="bio float-up" style="--delay: var(--delay-intro)">
+	<h1>Hello, I'm <span><br>Xander Riddle</span></h1>
+
+	<p>
+		I'm a 5th year computer science student at Georgia Tech, and a
+		self-proclaimed full-stack robotics engineer. If I were to describe myself
+		by my interests, 3 come to mind: robotics, music and video games. I spend
+		most of my free time building robots, and really enjoy leading the RoboWrestling 
+		team at Georgia Tech. Music has also been a very big part of my life for a long 
+		time. I have marched across the country in both the UGA and Georgia Tech marching 
+		bands, and have participated in a number of ensembles. These days I just like to 
+		jam with my friends back home. And a good game that I played recently was Silk Song.
+	</p>
+
+	<p>
+		This past year I was promoted to Project Manager of the RoboWrestling team, where I was
+		able to increase the quality of bots and the number of competitions we competed 
+		at by taking my team to both Japan and Brazil, and winning 4th place in 2 categories 
+		in Brazil. I also completed a lot of my intelligence course work, finally filling in a lot of
+		the knowledge gaps when it comes to artificial intelligence development.
+		I picked up 2 teaching assistant jobs, both for hardware. Most recently, I worked at a
+		startup called Kovari, where I really got acclimated to the fast-paced and
+		individual development environment, and it showed me that a startup might be
+		more achievable than I previously thought.
+	</p>
+
+	<p>
+		I'm really looking forward to my 5th year of school, and excited for what
+		the future has in store for me.
+	</p>
+
+	<div class="sign-off">
+		<a
+			class="resume"
+			href="/resume.pdf"
+			download="Xander-Riddle-Resume.pdf"
+			type="application/pdf"
+		>
+			<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M12 3v12" />
+				<path d="m7.5 10.5 4.5 4.5 4.5-4.5" />
+				<path d="M4.5 18.5V20a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-1.5" />
+			</svg>
+			Download Resume
+		</a>
+
+		<p class="written">Written {written}</p>
+	</div>
+</div>
+
+<style>
+	.bio {
+		max-width: 62ch;
+	}
+
+	h1 {
+		font-size: clamp(2rem, 3.6vw, 3rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		margin-bottom: 1.75rem;
+	}
+
+	h1 span {
+		color: var(--blue);
+	}
+
+	.bio p {
+		color: var(--text-muted);
+		font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+	}
+
+	.bio p + p {
+		margin-top: 1.25rem;
+	}
+
+	/* Button left, date right, on one line. They wrap to two rows only if the
+	   column gets narrow enough that they'd otherwise collide. */
+	.sign-off {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem 1.5rem;
+		margin-top: 2.25rem;
+	}
+
+	.resume {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.75rem 1.5rem;
+		border: 1px solid var(--blue-dim);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--blue) 12%, transparent);
+		font-family: var(--font-display);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		color: var(--text);
+		transition:
+			border-color 200ms ease-out,
+			background-color 200ms ease-out;
+	}
+
+	.resume svg {
+		width: 1.125rem;
+		height: 1.125rem;
+		transition: transform 200ms ease-out;
+	}
+
+	.resume:hover {
+		border-color: var(--blue);
+		background: color-mix(in srgb, var(--blue) 22%, transparent);
+	}
+
+	.resume:hover svg {
+		transform: translateY(2px);
+	}
+
+	/* Stays attached to the copy it timestamps — PLAN-about.md §2. */
+	.written {
+		margin-left: auto;
+		text-align: right;
+		font-size: 0.8125rem;
+		color: var(--text-muted);
+		opacity: 0.75;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.resume,
+		.resume svg {
+			transition: none;
+		}
+
+		.resume:hover svg {
+			transform: none;
+		}
+	}
+</style>
