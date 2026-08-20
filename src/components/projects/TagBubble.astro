@@ -1,0 +1,28 @@
+---
+import { tagColor } from "../../lib/tagColors";
+
+// One coloured pill — PLAN-projects.md §3. Colour comes from the central map,
+// used three ways: the border, a ~15% tint behind it, and the label itself.
+interface Props {
+	tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<span class="tag" style={`--tag:${tagColor(tag)}`}>{tag}</span>
+
+<style>
+	.tag {
+		display: inline-block;
+		padding: 0.1875rem 0.625rem;
+		border: 1px solid var(--tag);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--tag) 15%, transparent);
+		color: var(--tag);
+		font-size: 0.75rem;
+		line-height: 1.4;
+		letter-spacing: 0.01em;
+		white-space: nowrap;
+	}
+</style>

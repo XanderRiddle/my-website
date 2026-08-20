@@ -1,0 +1,139 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import TagBubble from "./TagBubble.astro";
+
+// PLAN-projects.md §2. Whole card is one link; hover lift + blue glow mirror
+// the homepage portrait so the two read as the same interaction.
+interface Props {
+	project: CollectionEntry<"projects">;
+	/** Stagger index for the entrance animation. */
+	index?: number;
+}
+
+const { project, index = 0 } = Astro.props;
+const { title, thumbnail, description, tags } = project.data;
+
+// The grid column tops out near 560px, so 1120 is the 2x breakpoint — and the
+// committed sources are stored at exactly that width (see .gitignore). Asking
+// past a source's own width just gets the source back, so cap it.
+const widths = [...new Set([560, Math.min(1120, thumbnail.width)])];
+---
+
+{/* float-up and the hover lift live on different elements on purpose: the
+    entrance animation uses fill-mode `both`, and an animated transform beats a
+    transitioned one, so sharing an element would kill the hover. Same split as
+    Portrait.astro. */}
+<a
+	class="card float-up"
+	href={`/projects/${project.id}`}
+	style={`--delay:${0.06 * index}s`}
+>
+	<span class="lift">
+		<span class="shot">
+			<Image
+				src={thumbnail}
+				alt={`${title} project thumbnail`}
+				widths={widths}
+				sizes="(max-width: 767px) 92vw, 560px"
+				format="webp"
+				loading={index < 2 ? "eager" : "lazy"}
+			/>
+		</span>
+
+		<h2>{title}</h2>
+		<p class="description">{description}</p>
+
+		<ul class="tags">
+			{
+				tags.map((tag) => (
+					<li>
+						<TagBubble tag={tag} />
+					</li>
+				))
+			}
+		</ul>
+	</span>
+</a>
+
+<style>
+	/* inline-block + width:100% keeps the card a single unbreakable block in
+	   the CSS-columns flow — PLAN-projects.md §1. */
+	.card {
+		display: inline-block;
+		width: 100%;
+		break-inside: avoid;
+		margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.lift {
+		display: block;
+		transition: transform 200ms ease-out;
+	}
+
+	.card:hover .lift,
+	.card:focus-visible .lift {
+		transform: translateY(-6px);
+	}
+
+	.shot {
+		display: block;
+		border-radius: 14px;
+		overflow: hidden;
+		border: 1px solid var(--blue-dim);
+		background: var(--bg-panel);
+		/* Glow as a box-shadow rather than a blurred ::before — the pseudo
+		   would be clipped by this element's own overflow: hidden. */
+		box-shadow: 0 0 0 transparent;
+		transition:
+			box-shadow 240ms ease-out,
+			border-color 240ms ease-out;
+	}
+
+	.card:hover .shot,
+	.card:focus-visible .shot {
+		border-color: var(--blue);
+		box-shadow: 0 16px 50px -12px color-mix(in srgb, var(--blue) 60%, transparent);
+	}
+
+	/* Width-constrained only, so a taller source makes a taller card — that
+	   difference is what staggers the columns (PLAN-projects.md §1). */
+	.shot :global(img) {
+		width: 100%;
+		height: auto;
+	}
+
+	h2 {
+		margin-top: 1rem;
+		font-size: 1.25rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		color: var(--text);
+	}
+
+	.description {
+		margin-top: 0.375rem;
+		color: var(--text-muted);
+		font-size: 0.9375rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4375rem;
+		margin-top: 0.875rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.lift {
+			transition: none;
+		}
+
+		.card:hover .lift,
+		.card:focus-visible .lift {
+			transform: none;
+		}
+	}
+</style>
