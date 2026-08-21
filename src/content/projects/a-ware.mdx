@@ -1,0 +1,43 @@
+---
+title: "A-Ware"
+thumbnail: "../../photos/project-thumbnails/aware-thumbnail.png"
+description: "Capstone project using computer vision on Raspberry Pi hardware."
+tags: ["Raspberry Pi", "Computer Vision", "Software"]
+order: 4
+---
+
+import PhotoGallery from "../../components/projects/PhotoGallery.astro";
+
+import aware1 from "../../photos/aware/1.jpg";
+import aware2 from "../../photos/aware/2.jpg";
+import aware3 from "../../photos/aware/3.jpg";
+import aware4 from "../../photos/aware/4.jpg";
+
+export const awarePhotos = [
+	{
+		src: aware1,
+		alt: "Team 11 posing in A-Ware branded hard hats and hi-vis vests at the Capstone Design Expo.",
+	},
+	{
+		src: aware2,
+		alt: "A-Ware's internals laid out unassembled, showing the neck-worn battery pack, Raspberry Pi Zero 2W, camera module, vibration motors, and haptic driver boards.",
+	},
+	{
+		src: aware3,
+		alt: "Close-up of the assembled A-Ware device with the detachable stereoscopic camera mounted at the rear joint of the 3D-printed frame.",
+	},
+	{
+		src: aware4,
+		alt: "Team 11 at the Capstone Design Expo holding up posters for their A-Ware presentation.",
+	},
+];
+
+## Overview
+
+<br />A-Ware is a wearable device I built with a team of five for Georgia Tech's interdispinary Create-X capstone course, designed to give construction workers situational awareness for the blind spot behind them. It's a shoulder-worn haptic rig paired with a rear-facing stereoscopic camera that watches for approaching hazards, like reversing trucks or swinging loads, and alerts the wearer with directional vibration before impact. The business idea behind it was to slot into construction site safety budgets as a supplement to existing PPE. I worked on the software side of the team, building the computer vision and hazard-detection pipeline that decides what's dangerous and how to alert the wearer.
+
+## Technical Overview
+
+<br />The device runs on a Luxonis OAK-D stereoscopic camera doing on-board object detection, feeding a Raspberry Pi Zero 2W that I programmed in Python against the camera's DepthAI SDK. For the demo, I used a pretrained vehicle-detection model with a 90% confidence filter to cut down false positives, then used the camera's depth output alongside each detection's bounding-box position to estimate the object's real-world position. Comparing that position across frames gives a velocity vector, so the Pi can tell whether something is actually closing in on the wearer rather than just present in frame. When a detected vehicle is approaching at more than 10 mph, the Pi drives the haptic motors, using `RPi.GPIO`, in the direction of the threat so the wearer feels which way to move without needing to turn around and look. Outside of the CV pipeline, I also designed and fabricated the electronics for the device, wiring the vibration motor driver boards, battery management system, and camera module into the 3D-printed frame the team built. Code for A-Ware is on [GitHub](https://github.com/XanderRiddle/A-Ware).
+
+<PhotoGallery images={awarePhotos} label="Photos of the A-Ware device and team" aspect="4 / 3" />
