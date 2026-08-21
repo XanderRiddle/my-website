@@ -37,7 +37,21 @@ const widths = (img: ImageMetadata) => [
 					class:list={["slide", i === 0 && "is-active"]}
 					aria-hidden={i === 0 ? undefined : "true"}
 				>
+					{/* Backdrop: a blurred, oversized copy of the same photo, so a
+					image whose aspect ratio doesn't match the frame still fills it
+					instead of leaving bare letterbox bars. */}
+					<div class="bg" aria-hidden="true">
+						<Image
+							src={src}
+							alt=""
+							widths={widths(src)}
+							sizes="(max-width: 767px) 92vw, 60rem"
+							format="webp"
+							loading={i === 0 ? "eager" : "lazy"}
+						/>
+					</div>
 					<Image
+						class="fg"
 						src={src}
 						alt={alt}
 						widths={widths(src)}
@@ -120,10 +134,30 @@ const widths = (img: ImageMetadata) => [
 		transform: translateX(var(--slide-shift));
 	}
 
-	.slide :global(img) {
+	.slide {
+		overflow: hidden;
+	}
+
+	.bg {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+	}
+
+	.bg :global(img) {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		filter: blur(32px) brightness(0.65) saturate(1.15);
+		transform: scale(1.2);
+	}
+
+	.slide :global(img.fg) {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 
 	.arrow {
