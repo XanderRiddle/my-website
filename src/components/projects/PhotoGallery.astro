@@ -1,0 +1,300 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+// General-purpose multi-photo carousel for project write-ups — same
+// fade/slide behavior as components/about/PhotoCarousel.astro, generalized to
+// an arbitrary photo count (dot nav instead of just prev/next) and a
+// caller-supplied aspect ratio instead of a fixed 2:3 portrait frame.
+interface Props {
+	images: { src: ImageMetadata; alt: string }[];
+	label: string;
+	aspect?: string;
+}
+
+const { images, label, aspect = "3 / 2" } = Astro.props;
+
+// Sources are already downscaled to (roughly) the largest width the page
+// asks for — see the note in .gitignore — so this just avoids requesting
+// past a source's own width.
+const widths = (img: ImageMetadata) => [
+	...new Set([640, 960, Math.min(1920, img.width)]),
+];
+---
+
+<div
+	class="gallery float-up"
+	role="group"
+	aria-roledescription="carousel"
+	aria-label={label}
+	style={`--aspect:${aspect}`}
+	tabindex="0"
+>
+	<div class="frame">
+		{
+			images.map(({ src, alt }, i) => (
+				<div
+					class:list={["slide", i === 0 && "is-active"]}
+					aria-hidden={i === 0 ? undefined : "true"}
+				>
+					<Image
+						src={src}
+						alt={alt}
+						widths={widths(src)}
+						sizes="(max-width: 767px) 92vw, 60rem"
+						format="webp"
+						loading={i === 0 ? "eager" : "lazy"}
+						fetchpriority={i === 0 ? "high" : "auto"}
+					/>
+				</div>
+			))
+		}
+	</div>
+
+	<button class="arrow prev" type="button" aria-label="Previous photo">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m14.5 5-7 7 7 7" />
+		</svg>
+	</button>
+
+	<button class="arrow next" type="button" aria-label="Next photo">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m9.5 5 7 7-7 7" />
+		</svg>
+	</button>
+
+	{
+		images.length > 1 && (
+			<div class="dots" role="tablist">
+				{images.map((_, i) => (
+					<button
+						class:list={["dot", i === 0 && "is-active"]}
+						type="button"
+						role="tab"
+						aria-label={`Go to photo ${i + 1}`}
+						aria-selected={i === 0 ? "true" : "false"}
+					/>
+				))}
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.gallery {
+		--slide-shift: 40px;
+		--slide-duration: 550ms;
+		position: relative;
+	}
+
+	.frame {
+		position: relative;
+		aspect-ratio: var(--aspect);
+		overflow: hidden;
+		border-radius: 16px;
+		border: 1px solid var(--blue-dim);
+		background: var(--bg-panel);
+	}
+
+	.slide {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: translateX(calc(-1 * var(--slide-shift)));
+	}
+
+	.slide.is-active,
+	.slide.is-leaving {
+		transition:
+			opacity var(--slide-duration) ease,
+			transform var(--slide-duration) ease;
+	}
+
+	.slide.is-active {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.slide.is-leaving {
+		opacity: 0;
+		transform: translateX(var(--slide-shift));
+	}
+
+	.slide :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0;
+		border: 1px solid var(--blue-dim);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--bg) 72%, transparent);
+		backdrop-filter: blur(6px);
+		color: var(--blue);
+		cursor: pointer;
+		transition:
+			background-color 200ms ease-out,
+			border-color 200ms ease-out;
+	}
+
+	.arrow:hover {
+		border-color: var(--blue);
+		background: color-mix(in srgb, var(--bg) 88%, transparent);
+	}
+
+	.arrow svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.prev {
+		left: 0.75rem;
+	}
+
+	.next {
+		right: 0.75rem;
+	}
+
+	.dots {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-top: 0.875rem;
+	}
+
+	.dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		padding: 0;
+		border: none;
+		border-radius: 999px;
+		background: var(--blue-dim);
+		cursor: pointer;
+		transition: background-color 200ms ease-out, transform 200ms ease-out;
+	}
+
+	.dot.is-active {
+		background: var(--blue);
+		transform: scale(1.3);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.gallery {
+			--slide-shift: 0px;
+		}
+
+		.arrow,
+		.dot {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	const INTERVAL = 5000;
+
+	for (const gallery of document.querySelectorAll<HTMLElement>(".gallery")) {
+		const slides = [...gallery.querySelectorAll<HTMLElement>(".slide")];
+		if (slides.length < 2) continue;
+
+		const prev = gallery.querySelector<HTMLButtonElement>(".prev");
+		const next = gallery.querySelector<HTMLButtonElement>(".next");
+		const dots = [...gallery.querySelectorAll<HTMLButtonElement>(".dot")];
+		let current = slides.findIndex((s) => s.classList.contains("is-active"));
+		if (current < 0) current = 0;
+		let timer: number | undefined;
+		let hovered = false;
+		let focused = false;
+
+		function show(index: number) {
+			const target = (index + slides.length) % slides.length;
+			if (target === current) return;
+
+			const outgoing = slides[current];
+			outgoing.classList.remove("is-active");
+			outgoing.classList.add("is-leaving");
+			outgoing.setAttribute("aria-hidden", "true");
+			outgoing.addEventListener(
+				"transitionend",
+				() => outgoing.classList.remove("is-leaving"),
+				{ once: true },
+			);
+
+			const incoming = slides[target];
+			incoming.classList.remove("is-leaving");
+			incoming.classList.add("is-active");
+			incoming.removeAttribute("aria-hidden");
+
+			dots[current]?.classList.remove("is-active");
+			dots[current]?.setAttribute("aria-selected", "false");
+			dots[target]?.classList.add("is-active");
+			dots[target]?.setAttribute("aria-selected", "true");
+
+			current = target;
+		}
+
+		function stop() {
+			if (timer !== undefined) window.clearInterval(timer);
+			timer = undefined;
+		}
+
+		function start() {
+			stop();
+			if (hovered || focused) return;
+			timer = window.setInterval(() => show(current + 1), INTERVAL);
+		}
+
+		function go(step: number) {
+			show(current + step);
+			start();
+		}
+
+		prev?.addEventListener("click", () => go(-1));
+		next?.addEventListener("click", () => go(1));
+		dots.forEach((dot, i) => {
+			dot.addEventListener("click", () => {
+				show(i);
+				start();
+			});
+		});
+
+		gallery.addEventListener("keydown", (event) => {
+			if (event.key === "ArrowLeft") {
+				event.preventDefault();
+				go(-1);
+			} else if (event.key === "ArrowRight") {
+				event.preventDefault();
+				go(1);
+			}
+		});
+
+		gallery.addEventListener("pointerenter", () => {
+			hovered = true;
+			stop();
+		});
+		gallery.addEventListener("pointerleave", () => {
+			hovered = false;
+			start();
+		});
+		gallery.addEventListener("focusin", () => {
+			focused = true;
+			stop();
+		});
+		gallery.addEventListener("focusout", (event) => {
+			if (gallery.contains(event.relatedTarget as Node | null)) return;
+			focused = false;
+			start();
+		});
+
+		start();
+	}
+</script>

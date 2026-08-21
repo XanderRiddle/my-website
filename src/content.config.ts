@@ -9,7 +9,7 @@ import { z } from "astro/zod";
 // `tags` is a plain string array rather than an enum: PLAN-projects.md §3 wants
 // an unknown tag to fall back to a grey chip, not fail the build.
 const projects = defineCollection({
-	loader: glob({ base: "./src/content/projects", pattern: "**/*.md" }),
+	loader: glob({ base: "./src/content/projects", pattern: "**/*.{md,mdx}" }),
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),

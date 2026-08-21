@@ -1,0 +1,134 @@
+---
+title: "Ferrarii"
+thumbnail: "../../photos/project-thumbnails/ferrarii-thumbnail.jpg"
+description: "RoboJackets' premier 3kg sumo robot, led development as bot lead."
+tags: ["PCB Design", "Manufacturing", "CAD", "C++", "Embedded Systems", "Full Stack"]
+order: 1
+---
+
+import PhotoGallery from "../../components/projects/PhotoGallery.astro";
+
+import internals1 from "../../photos/ferrarii/internals/internals_1.jpg";
+import internals2 from "../../photos/ferrarii/internals/internals_2.jpg";
+import internals3 from "../../photos/ferrarii/internals/internals_3.png";
+
+import rsm1 from "../../photos/ferrarii/rsm/rsm_1.jpg";
+import rsm2 from "../../photos/ferrarii/rsm/rsm_2.jpg";
+import rsm3 from "../../photos/ferrarii/rsm/rsm_3.jpg";
+import rsm4 from "../../photos/ferrarii/rsm/rsm_4.jpg";
+import rsm5 from "../../photos/ferrarii/rsm/rsm_5.jpg";
+import rsm6 from "../../photos/ferrarii/rsm/rsm_6.jpg";
+import rsm7 from "../../photos/ferrarii/rsm/rsm_7.jpg";
+import rsm8 from "../../photos/ferrarii/rsm/rsm_8.jpg";
+import rsm9 from "../../photos/ferrarii/rsm/rsm_9.jpg";
+import rsm10 from "../../photos/ferrarii/rsm/rsm_10.jpg";
+
+export const internalsPhotos = [
+	{
+		src: internals1,
+		alt: "Top-down view of Ferrarii's motor mount and gear train, with the two Maxon RE40 motors, drive gears, and PCB edges visible on either side.",
+	},
+	{
+		src: internals2,
+		alt: "Side profile of Ferrarii's chassis showing the aggressive front slope, LiPo battery, gear train, and stacked control PCBs.",
+	},
+	{
+		src: internals3,
+		alt: "KiCad layout of Ferrarii's control board, with the motor driver, diffuse sensor routing, Teensy 4.1 header, and start module regions labeled.",
+	},
+];
+
+export const rsmPhotos = [
+	{
+		src: rsm1,
+		alt: "Xander and a teammate holding jerseys signed by competitors after the tournament.",
+	},
+	{
+		src: rsm2,
+		alt: "The RoboJackets team gathered at their pit table, with competing teams' flags hanging in the venue behind them.",
+	},
+	{
+		src: rsm3,
+		alt: "The RoboJackets team posing on the competition floor with RSM tournament banners.",
+	},
+	{
+		src: rsm4,
+		alt: "A row of eliminated 3kg sumo robots lined up on the grass outside the venue, each marked with a paper flag.",
+	},
+	{
+		src: rsm5,
+		alt: "The RoboJackets team at the airport gate before their flight to São Paulo.",
+	},
+	{
+		src: rsm6,
+		alt: "RoboJackets and competitors from other teams posing together on an outdoor field at night after the tournament.",
+	},
+	{
+		src: rsm7,
+		alt: "The team posing outside at night after the tournament.",
+	},
+	{
+		src: rsm8,
+		alt: "3kg sumo robots, including Ferrarii, arranged around the edge of the dohyo after being eliminated from competition.",
+	},
+	{
+		src: rsm9,
+		alt: "The team celebrating at a restaurant with competitors after the tournament, under a \"Voltem Sempre\" sign.",
+	},
+	{
+		src: rsm10,
+		alt: "The RoboJackets team posing together inside the competition venue, with a match replaying on the screen behind them.",
+	},
+];
+
+## Overview
+
+<br />Ferrarii is a 3kg auto sumo robot, which means it competes in an autonomous form of combat robotics inspired by Japanese sumo wrestling. Robots in this competition fight to push each other out of a circular arena, where speed and precision are crucial factors in the success of these robots. Ferrarii is Georgia Tech's premier 3kg robot, being the oldest and having seen the most success in competition, built primarily by me with the help of Rudra Goel on the latest iteration. Ferrarii has seen the most competition of any 3kg at Georgia Tech.
+
+- **4th** @ 2026 RSM International in São Paulo, Brazil
+- 2025 All Japan Robot Sumo Tournament, Tokyo, Japan
+- 2024 All Japan Robot Sumo Tournament, Tokyo, Japan
+
+And has also been iterated on the most of any 3kg robot at Georgia Tech, undergoing 3 full redesigns, making it somewhat of a bot of Theseus. However what characterizes Ferrarii most is its aggressive front slope and high torque. Ferrarii is equipped with Maxon's very powerful RE 40 24V brushed motors, being powered at 40V, giving it the strength to out push even the heaviest of robots.
+
+## Technical Overview
+
+<br />Ferrarii was designed first and foremost with the aggressive slope in mind. Compared to our opponents, Ferrarii has a much deeper cut in the front, which is a major engineering challenge when trying to fit all of the components in such a compact design. The reason I go for the aggressive slope design is because I was inspired by a robot I saw in competition that had a tendency to launch robots in the air as it pushed them out, so I wanted to make my robot like a ramp so it would have the same effect. It is also typically advantageous to keep a low profile, so we strived to build our robot as low as our motors would allow us to. In iterations past we found that Ferrarii was too fast to control reliably, and we had a lot of spare RPM so in this iteration we are running with a 6.42:1 gear ratio which has greatly increased the torque and handling of the robot. For a full BOM of the robot please see the table below.
+
+<div class="media table-wrap">
+
+| Component | Price | Qty | Total |
+| --- | --- | --- | --- |
+| [Brushed DC Motor - Maxon RE 40 (148866)](https://www.maxongroup.com/maxon/view/product/motor/dcmotor/re/re40/148866) | $600.00 | 2 | $1,200.00 |
+| [Diffuse Type Reflective Sensor (Omron E3Z-D62)](https://www.jsumo.com/omron-e3z-d62-diffuse-sensor) | $64.90 | 8 | $519.20 |
+| [Steel Gear Bundle (0.8 Module - 6.42:1 Reduction)](https://www.jsumo.com/steel-gear-bundle-08-module-6421-reduction) | $47.00 | 2 | $94.00 |
+| [Motor Driver (48V 100A DC Dual H-Bridge)](https://lunoxrobotics.com/collections/motor-controller) | $80.00 | 1 | $80.00 |
+| [LiPo Battery (5S, 2-pack)](https://www.gaoneng.shop/products/gaoneng-gnb-lihv-5s-19v-880mah-160c-xt30-lipo-battery) | $45.80 | 1 | $45.80 |
+| [Teensy 4.1 Microcontroller](https://www.amazon.com/dp/B088JY7P2H/) | $34.90 | 1 | $34.90 |
+| [Rubber Wheel Pair (35×30mm)](https://www.jsumo.com/jsumo-robot-wheel-35x30mm-pair) | $26.50 | 1 | $26.50 |
+| [Start Module](https://www.jsumo.com/microstart-sumo-minisumo-robot-start-module) | $6.95 | 1 | $6.95 |
+| [Blade](https://lunoxrobotics.com/products/japanese-spring-steel-razor-blade-for-mega-sumo) | $4.99 | 1 | $4.99 |
+| | | | |
+| **Total** | | | **$2,012.34** |
+
+</div>
+
+<br />Notably, a lot of these components are quite large and required some very clever engineering to connect all together. That is why another priority when designing was mechanically integrated PCB design. This resulted in some of the most interesting shaped PCBs I've ever made due to them needing to route under the gear train and reach every end of the robot to get the reflection sensors in every corner. It was a major priority to reduce all wires to a minimum, and thus there are top and bottom PCBs with different functions. The top PCB is the control board and houses all the functionality for the human interaction and onboard programming for the robot. The bottom PCBs route the line sensors and connect the 8 diffusion sensors. The top and bottom PCBs are connected via a single ribbon cable to absolutely minimize wires throughout the robot.
+
+It is also worth mentioning the robot was programmed by me using C++ and the Arduino framework. It currently has 3 strategies and was designed with an architecture in mind to easily add more as I think of them. The way the robot thinks is it essentially has 3 main phases. Phase 1 is the initial attack/action. Once it has completed its initial action it will fall back into 1 of 2 different modes depending on whether or not it can currently see the enemy. Those modes generally are search and attack. Code is of course available on [GitHub](https://github.com/RoboJackets/robowrestling-software/tree/ferrarii/3kg/Ferrarii-2026).
+
+<PhotoGallery images={internalsPhotos} label="Photos of Ferrarii's internals" aspect="4 / 3" />
+
+## RSM International Competition, São Paulo, Brazil, April 2026
+
+<br />The RSM International Competition is the largest sumo robotics event that takes place in Latin America and was probably the most enjoyable competition experience I have ever had. Ferrarii took 4th place in this competition and had many competition highlights including beating the top seed in match 1 and claiming Georgia Tech's first 3kg international match win. But besides Ferrarii performing well at the competition, it was the atmosphere that really made the competition special. It may have just been Brazilian hospitality, but every competitor was so excited to meet us and talk to us, it really made the whole experience feel so special. After the competition, we were invited out to Brazilian BBQ and dancing, and made so many lasting memories, it was truly an inspiring experience where we got to exchange so much robot knowledge, and immerse ourselves within the community. We plan on returning in 2027, and this time we will take home a trophy.
+
+<PhotoGallery images={rsmPhotos} label="Photos from RSM International 2026 in São Paulo" aspect="3 / 2" />
+
+<figure class="media">
+	<video controls preload="metadata" poster="/videos/ferrarii-compilation-poster.jpg" width="1280" height="720">
+		<source src="/videos/ferrarii-rsm-2026-compilation.mp4" type="video/mp4" />
+		Your browser doesn't support embedded video, <a href="/videos/ferrarii-rsm-2026-compilation.mp4">download the match compilation</a> instead.
+	</video>
+	<figcaption>Match compilation from RSM International 2026 in São Paulo, Brazil.</figcaption>
+</figure>
