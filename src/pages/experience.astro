@@ -1,5 +1,105 @@
 ---
-import PageStub from "../components/PageStub.astro";
+import Layout from "../layouts/Layout.astro";
+import ExperienceCard from "../components/experience/ExperienceCard.astro";
+
+// Reverse-chronological, same order LinkedIn lists them in. The two UPS
+// summers share one card since the role and description are identical.
+const experience = [
+	{
+		role: "RoboWrestling Project Manager",
+		company: "RoboJackets, Georgia Tech",
+		dates: "Apr 2025 - Present",
+		location: "Atlanta, GA",
+		description:
+			"I run the RoboWrestling team at RoboJackets, which means leading 60+ engineers across mechanical, electrical, and software as we design and build combat robots for two size classes, 3kg and 500g, judged on how fast and aggressively they can shove each other out of a ring. Day to day that's managing our $50K budget (I doubled the parts allocation from $10K to $20K), building the training curriculum that gets 40+ new engineers up to speed every year, and running our two annual in-house competitions. I also took the team to compete internationally in Japan and Brazil this year, plus out to Maker Faire Orlando, where our 500g robots swept 1st, 2nd, and 3rd. Along the way we quadrupled our competition roster, and our top 3kg robot became the first in RoboJackets history to place at an international event.",
+		tags: ["Leadership", "Project Management", "Robotics", "Budgeting"],
+	},
+	{
+		role: "Software Lead Developer",
+		company: "RoboJackets, Georgia Tech",
+		dates: "Apr 2024 - Apr 2025",
+		location: "Atlanta, GA",
+		description:
+			"Before stepping into the PM role, I led the RoboWrestling software team, about 10 engineers, with a real focus on keeping people engaged so they'd stick around season after season. I worked closely with our electrical and mechanical folks to design, build, and maintain the software behind our top 3kg autonomous sumo robot, and separately directed 20+ engineers building out the software architecture for our newer 500g robots. I also ran firmware training for the whole team, teaching incoming members Git, C++, and Arduino from scratch. We took the 3kg robot to the RoboGames international qualifier and placed 1st among US teams, 5th overall.",
+		tags: ["Leadership", "C++", "Embedded Systems", "Firmware"],
+	},
+	{
+		role: "Mechatronics Engineering Intern",
+		company: "Kovari",
+		dates: "May 2026 - Aug 2026",
+		location: "San Francisco, CA",
+		description:
+			"At Kovari I worked hands-on with robot assembly, fixture design, and data collection, basically whatever manufacturing or testing task moved the robots forward. My main project was designing a wearable, off-robot data collection rig that doubled data throughput compared to the old on-robot method, built so a single operator could run it as the fleet scaled from 4 units toward a planned 20 to 100. I also wrote the robot's first wiring diagram, which turned into the standard reference for onboarding new engineers, and built the team's first standardized assembly process, cutting build time from about a week down to two days.",
+		tags: ["Robotics", "Embedded Systems", "Manufacturing", "CAD"],
+	},
+	{
+		role: "Prototyping Intelligent Devices TA",
+		company: "College of Computing, Georgia Tech",
+		dates: "Jan 2026 - May 2026",
+		location: "Atlanta, GA",
+		description:
+			"I TA'd Prototyping Intelligent Devices, supporting 100+ students as they designed and built long-term embedded systems projects, helping them debug everything from circuit issues to firmware logic along the way.",
+		tags: ["Teaching", "Embedded Systems", "Prototyping"],
+	},
+	{
+		role: "Digital Design Lab TA",
+		company: "School of Electrical & Computer Engineering, Georgia Tech",
+		dates: "Aug 2025 - Jan 2026",
+		location: "Atlanta, GA",
+		description:
+			"I TA'd the Digital Design Lab, supporting 100+ students working through FPGA design in VHDL and digital logic fundamentals, from chasing down syntax errors to helping them reason through timing issues.",
+		tags: ["Teaching", "Digital Circuit Design"],
+	},
+	{
+		role: "Full Stack Software Engineer",
+		company: "UPS Supply Chain",
+		dates: "Summer 2024 & Summer 2025",
+		location: "Alpharetta, GA",
+		description:
+			"I came back to UPS Supply Chain for two summers as a full stack engineer on their brokerage systems team, working the whole life cycle from requirements and architecture through coding, testing, and deployment. I built web apps in Angular, optimized backend services enough to cut memory usage by 80%, and rebuilt a set of Windows Forms tools in C# that 50+ developers now use daily to duplicate and edit shipment data. My stack there was mostly C#, SQL Server, T-SQL, and Azure, with some HTML/CSS/JS on the frontend. Both summers I also competed in UPS Hacks, building a computer vision tool that pulled truck IDs off security footage and a voice-driven shipment creation feature, and placed top 3 out of 60+ teams in 2025.",
+		tags: ["C#", "SQL Server", "Azure", "Full Stack", "Angular"],
+	},
+];
 ---
 
-<PageStub title="Experience" />
+<Layout
+	title="Experience — Xander Riddle"
+	description="Xander Riddle's work experience: leading RoboJackets' RoboWrestling team, engineering internships at Kovari and UPS, and teaching assistant roles at Georgia Tech."
+>
+	<section class="experience">
+		<header class="intro float-up">
+			<h1>Experience</h1>
+		</header>
+
+		<div class="list">
+			{
+				experience.map((job, i) => (
+					<ExperienceCard {...job} index={i} open={i === 0} />
+				))
+			}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.experience {
+		max-width: 44rem;
+		margin-inline: auto;
+		padding: calc(var(--nav-height) + 3.5rem) var(--page-gutter) 5rem;
+	}
+
+	.intro {
+		margin-bottom: clamp(2rem, 4vw, 3rem);
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 5vw, 3.5rem);
+		letter-spacing: -0.02em;
+	}
+
+	@media (max-width: 767px) {
+		.experience {
+			padding-top: calc(var(--nav-height) + 5rem);
+		}
+	}
+</style>

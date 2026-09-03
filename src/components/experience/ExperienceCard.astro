@@ -1,0 +1,169 @@
+---
+import TagBubble from "../projects/TagBubble.astro";
+
+// Single-column bubble block for /experience. <details>/<summary> gives the
+// expand/collapse for free with no JS, matching the rest of the site's
+// zero-framework approach.
+interface Props {
+	role: string;
+	company: string;
+	dates: string;
+	location: string;
+	description: string;
+	tags: string[];
+	/** Stagger index for the entrance animation. */
+	index?: number;
+	/** First card starts expanded so the page isn't a wall of closed bubbles. */
+	open?: boolean;
+}
+
+const { role, company, dates, location, description, tags, index = 0, open = false } = Astro.props;
+---
+
+<details class="card float-up" style={`--delay:${0.06 * index}s`} open={open}>
+	<summary>
+		<span class="heading">
+			<h2>{role}</h2>
+			<p class="company">{company}</p>
+		</span>
+
+		<span class="meta">
+			<span class="dates">{dates}</span>
+			<span class="location">{location}</span>
+		</span>
+
+		<svg class="chevron" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m6 9 6 6 6-6" />
+		</svg>
+	</summary>
+
+	<div class="content">
+		<p class="description">{description}</p>
+
+		<ul class="tags">
+			{
+				tags.map((tag) => (
+					<li>
+						<TagBubble tag={tag} />
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</details>
+
+<style>
+	.card {
+		border: 1px solid var(--blue-dim);
+		border-radius: 14px;
+		background: var(--bg-panel);
+		transition: border-color 240ms ease-out;
+	}
+
+	.card + .card {
+		margin-top: 1rem;
+	}
+
+	.card:hover,
+	.card[open] {
+		border-color: var(--blue);
+	}
+
+	summary {
+		list-style: none;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.25rem 1.5rem;
+		cursor: pointer;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary:focus-visible {
+		outline: 2px solid var(--blue);
+		outline-offset: -2px;
+		border-radius: 10px;
+	}
+
+	.heading {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+	}
+
+	h2 {
+		font-size: 1.0625rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		color: var(--text);
+	}
+
+	.company {
+		font-size: 0.875rem;
+		color: var(--blue);
+	}
+
+	.meta {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 0.125rem;
+		margin-left: auto;
+		text-align: right;
+		color: var(--text-muted);
+		font-size: 0.8125rem;
+		white-space: nowrap;
+	}
+
+	.chevron {
+		flex-shrink: 0;
+		width: 1.125rem;
+		height: 1.125rem;
+		color: var(--text-muted);
+		transition: transform 200ms ease-out;
+	}
+
+	.card[open] .chevron {
+		transform: rotate(180deg);
+	}
+
+	.content {
+		padding: 0 1.5rem 1.5rem;
+	}
+
+	.description {
+		color: var(--text-muted);
+		font-size: 0.9375rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4375rem;
+		margin-top: 1rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	@media (max-width: 559px) {
+		summary {
+			flex-wrap: wrap;
+			padding: 1.125rem 1.25rem;
+		}
+
+		.meta {
+			align-items: flex-start;
+			text-align: left;
+			margin-left: 0;
+			order: 3;
+			flex-basis: 100%;
+		}
+
+		.content {
+			padding: 0 1.25rem 1.25rem;
+		}
+	}
+</style>
