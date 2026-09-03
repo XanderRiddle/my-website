@@ -6,12 +6,21 @@ import ExperienceCard from "../components/experience/ExperienceCard.astro";
 // summers share one card since the role and description are identical.
 const experience = [
 	{
+		role: "Mechatronics Engineering Intern",
+		company: "Kovari",
+		dates: "May 2026 - Aug 2026",
+		location: "San Francisco, CA",
+		description:
+			"At Kovari I worked hands-on with robot assembly, fixture design, and data collection. While at Kovari I designed many small things, but one larger project I worked on was designing a wearable, off-robot data collection rig that doubled data throughput compared to the old on-robot method. I also wrote the robot's first wiring diagram, which turned into the standard reference for onboarding new engineers, and built the team's first standardized assembly process, cutting build time from about a week down to two days.",
+		tags: ["Robotics", "Embedded Systems", "Manufacturing", "CAD"],
+	},
+	{
 		role: "RoboWrestling Project Manager",
 		company: "RoboJackets, Georgia Tech",
 		dates: "Apr 2025 - Present",
 		location: "Atlanta, GA",
 		description:
-			"I run the RoboWrestling team at RoboJackets, which means leading 60+ engineers across mechanical, electrical, and software as we design and build combat robots for two size classes, 3kg and 500g, judged on how fast and aggressively they can shove each other out of a ring. Day to day that's managing our $50K budget (I doubled the parts allocation from $10K to $20K), building the training curriculum that gets 40+ new engineers up to speed every year, and running our two annual in-house competitions. I also took the team to compete internationally in Japan and Brazil this year, plus out to Maker Faire Orlando, where our 500g robots swept 1st, 2nd, and 3rd. Along the way we quadrupled our competition roster, and our top 3kg robot became the first in RoboJackets history to place at an international event.",
+			"I run the RoboWrestling team at RoboJackets, which means I lead 60+ engineers across mechanical, electrical, and software through the design and build process of sumo combat robots for two size classes, 3kg and 500g. Day to day I manage a $50K budget (I doubled the parts allocation from $10K to $20K last year), build the training curriculum to get 40+ new engineers up to speed every year, and run our two annual in-house competitions. I also took the team to compete internationally in Japan and Brazil this year, plus out to Maker Faire Orlando, where our 500g robots swept 1st, 2nd, and 3rd. Along the way we quadrupled our competition roster, and my 3kg robot became the first in RoboJackets history to place at an international event.",
 		tags: ["Leadership", "Project Management", "Robotics", "Budgeting"],
 	},
 	{
@@ -22,15 +31,6 @@ const experience = [
 		description:
 			"Before stepping into the PM role, I led the RoboWrestling software team, about 10 engineers, with a real focus on keeping people engaged so they'd stick around season after season. I worked closely with our electrical and mechanical folks to design, build, and maintain the software behind our top 3kg autonomous sumo robot, and separately directed 20+ engineers building out the software architecture for our newer 500g robots. I also ran firmware training for the whole team, teaching incoming members Git, C++, and Arduino from scratch. We took the 3kg robot to the RoboGames international qualifier and placed 1st among US teams, 5th overall.",
 		tags: ["Leadership", "C++", "Embedded Systems", "Firmware"],
-	},
-	{
-		role: "Mechatronics Engineering Intern",
-		company: "Kovari",
-		dates: "May 2026 - Aug 2026",
-		location: "San Francisco, CA",
-		description:
-			"At Kovari I worked hands-on with robot assembly, fixture design, and data collection, basically whatever manufacturing or testing task moved the robots forward. My main project was designing a wearable, off-robot data collection rig that doubled data throughput compared to the old on-robot method, built so a single operator could run it as the fleet scaled from 4 units toward a planned 20 to 100. I also wrote the robot's first wiring diagram, which turned into the standard reference for onboarding new engineers, and built the team's first standardized assembly process, cutting build time from about a week down to two days.",
-		tags: ["Robotics", "Embedded Systems", "Manufacturing", "CAD"],
 	},
 	{
 		role: "Prototyping Intelligent Devices TA",
@@ -47,7 +47,7 @@ const experience = [
 		dates: "Aug 2025 - Jan 2026",
 		location: "Atlanta, GA",
 		description:
-			"I TA'd the Digital Design Lab, supporting 100+ students working through FPGA design in VHDL and digital logic fundamentals, from chasing down syntax errors to helping them reason through timing issues.",
+			"I TA'd the Digital Design Lab, supporting 100+ students working through FPGA design in VHDL and digital logic fundamentals.",
 		tags: ["Teaching", "Digital Circuit Design"],
 	},
 	{
