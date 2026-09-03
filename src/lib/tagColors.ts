@@ -15,6 +15,21 @@ export const TAG_COLORS: Record<string, string> = {
 	Software: "#818CF8", // indigo
 	Hackathon: "#FB923C", // orange
 	"Web Dev": "#A3E635", // lime
+
+	// Experience page additions — PLAN-projects.md's grey fallback still
+	// covers anything below, these just earn their own hue.
+	Leadership: "#FDE047", // yellow
+	"Project Management": "#FB7185", // rose
+	Robotics: "#38BDF8", // sky
+	Budgeting: "#FCA5A5", // light red
+	Firmware: "#C084FC", // purple
+	Teaching: "#6EE7B7", // emerald
+	Prototyping: "#F0ABFC", // fuchsia
+	"Digital Circuit Design": "#93C5FD", // light blue
+	"C#": "#67E8F9", // light cyan
+	"SQL Server": "#FDBA74", // light orange
+	Azure: "#0EA5E9", // deep sky
+	Angular: "#E11D48", // deep rose
 };
 
 export const FALLBACK_TAG_COLOR = "#8A94A6"; // --text-muted
